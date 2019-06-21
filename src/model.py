@@ -1,19 +1,25 @@
 import numpy as np
 import dnest4.builder as bd
 
-data = {"x": np.array([1.0, 2.0, 3.0, 4.0, 5.0]),
-        "y": np.array([-1.0, 2.0, -3.0, 3.9, 5.1]),
-        "v": np.array([20.0, -40.0, 23.3, 39.2, -11.2]),
-        "sig_v": np.array([1.0, 2.0, 0.5, 2.2, 1.2]),
-        "N": 5}
+# Load the data and put it in a dictionary
+raw = np.loadtxt("gfl_new_data.txt")
+data = { "x": raw[:,0],
+         "y": raw[:,1],
+         "v": raw[:,2],
+         "sig_v": raw[:,3],
+         "N": raw.shape[0] }
 
 # Create the model
 model = bd.Model()
 
-# Velocity dispersion
-model.add_node(bd.Node("log_velocity_dispersion", bd.Normal(0.0, 10.0)))
+# Constant velocity dispersion
+model.add_node(bd.Node("log_velocity_dispersion", bd.T(4.605, 2.0, 1.0)))
 model.add_node(bd.Node("velocity_dispersion",
                             bd.Delta("exp(log_velocity_dispersion)")))
+
+# Constant velocity offset
+model.add_node(bd.Node("c", bd.T(0.0, 0.1, 1.0)))
+model.add_node(bd.Node("mu_v", bd.Delta("c*velocity_dispersion")))
 
 # p(data | parameters)
 for i in range(0, data["N"]):
@@ -22,7 +28,7 @@ for i in range(0, data["N"]):
                 .format(index=i)
 
     name = "v{index}".format(index=i)
-    model.add_node(bd.Node(name, bd.Normal(0.0, stdev), observed=True))
+    model.add_node(bd.Node(name, bd.Normal("mu_v", stdev), observed=True))
 
 # Create the C++ code
 bd.generate_h(model, data)
