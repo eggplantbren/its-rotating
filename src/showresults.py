@@ -12,7 +12,7 @@ plt.rc("text", usetex=True)
 posterior_sample = dn4.my_loadtxt("posterior_sample.txt")
 fig = corner.corner(posterior_sample,
               labels=["$\\Sigma$ (km/s)", "$v_{\\rm sys}$ (km/s)",
-                        "$A$ (km/s)", "$\phi$"],
+                        "$A$ (km/s)", "$\phi$ (rad.)"],
               plot_contours=False, plot_density=False,
               data_kwargs={"alpha": 0.15, "ms": 0.75},
               label_kwargs=dict(fontsize=18))
