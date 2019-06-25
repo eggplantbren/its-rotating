@@ -11,11 +11,6 @@ data = { "x": raw[:,0],
          "sig_v": raw[:,5],
          "N": raw.shape[0] }
 
-
-# Polar coordinates
-data["r"] = np.sqrt(data["x"]**2 + data["y"]**2)
-data["theta"] = np.arctan2(data["y"], data["x"])
-
 # Create the model
 model = bd.Model()
 
