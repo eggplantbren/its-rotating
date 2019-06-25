@@ -5,13 +5,11 @@ import dnest4.builder as bd
 raw = np.loadtxt("gfl_new_data.txt")
 data = { "x": raw[:,0],
          "y": raw[:,1],
-         "v": raw[:,2],
-         "sig_v": raw[:,3],
+         "r": raw[:,2],
+         "theta": raw[:,3],
+         "v": raw[:,4],
+         "sig_v": raw[:,5],
          "N": raw.shape[0] }
-
-# Polar coordinates
-data["r"] = np.sqrt(data["x"]**2 + data["y"]**2)
-data["theta"] = np.arctan2(data["y"], data["x"])
 
 # Create the model
 model = bd.Model()
