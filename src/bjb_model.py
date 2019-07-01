@@ -15,7 +15,7 @@ data = { "x": raw[:,0],
 model = bd.Model()
 
 # Constant velocity dispersion
-model.add_node(bd.Node("log10_velocity_dispersion", bd.T(2.0, 1.0, 2.0)))
+model.add_node(bd.Node("log10_velocity_dispersion", bd.T(1.0, 0.5, 4.0)))
 model.add_node(bd.Node("velocity_dispersion",
                             bd.Delta("pow(10.0, log10_velocity_dispersion)")))
 
